@@ -15,7 +15,6 @@ class Blog(Base):
     creator = relationship("User", back_populates="blogs")
 
 
-
 class User(Base):
     __tablename__ = "users"
 

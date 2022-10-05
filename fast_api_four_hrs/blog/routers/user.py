@@ -6,10 +6,13 @@ from fast_api_four_hrs.blog.database import get_db
 from fast_api_four_hrs.blog.hashing import Hash
 from fast_api_four_hrs.blog.schemas import ShowUser
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/user",
+    tags=["Users"]
+)
 
 
-@router.post("/user", response_model=ShowUser, tags=["users"])
+@router.post("/", response_model=ShowUser)
 def create_user(request: schemas.User, db: Session = Depends(get_db)):
     # hashedPassword = pwd_cxt.hash(request.password)
     new_user = models.User(name=request.name, email=request.email,
@@ -21,7 +24,7 @@ def create_user(request: schemas.User, db: Session = Depends(get_db)):
     return new_user
 
 
-@router.get("/user/{user_id}", response_model=ShowUser, tags=["users"])
+@router.get("/{user_id}", response_model=ShowUser)
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
